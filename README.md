@@ -2,7 +2,7 @@
 
 This is the implementation of the paper "Background-Aware Pooling and Noise-Aware Loss for Weakly-Supervised Semantic Segmentation".
 
-For more information, checkout the project site [[website](https://cvlab.yonsei.ac.kr/projects/BANA/)] and the paper [[PDF](https://arxiv.org/pdf/2104.00905.pdf)].
+For more information, please checkout the project site [[website](https://cvlab.yonsei.ac.kr/projects/BANA/)] and the paper [[PDF](https://arxiv.org/pdf/2104.00905.pdf)].
 
 ## Requirements
 * Python >= 3.6
