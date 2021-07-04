@@ -1,0 +1,23 @@
+NAME: "SegNet_VGG"
+
+SEED: 13
+
+DATA: 
+  ROOT: "/workspace/BDH/data/VOCdevkit/VOC2012"
+  MODE: "train"
+  PSEUDO_LABEL_FOLDER: ["Ycrf", "Yret"]
+  BATCH_SIZE: 20
+  CROP_SIZE: 321
+  
+MODEL:
+  FREEZE_BN: False
+  DAMP: 7 
+  LAMBDA: 0.1
+  DCRF: [4, 121, 5, 3, 3] # DeepLab-V1-LargFOV
+
+SOLVER:
+  LR: 1e-3 
+  MOMENTUM: 0.9
+  WEIGHT_DECAY: 5e-4
+  MAX_ITER: 23805 
+  GAMMA: 0.9

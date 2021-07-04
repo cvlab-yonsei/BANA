@@ -11,6 +11,7 @@ CLASS_COLORS = (
     (224, 224, 192)
 )
 
+
 def color_map(N=256, normalized=False):
     def bitget(byteval, idx):
         return ((byteval & (1 << idx)) != 0)
@@ -28,6 +29,7 @@ def color_map(N=256, normalized=False):
     cmap = cmap/255 if normalized else cmap
     return cmap
 
+
 def decode_VOC_labels(mask):
     num_classes = len(CLASS_COLORS)
     h, w = mask.shape
@@ -41,3 +43,13 @@ def decode_VOC_labels(mask):
                 pixels[k_, j_] = CLASS_COLORS[-1]
     output = np.array(img)
     return output
+
+
+def get_npimg(x):
+    img = x.clone()
+    img -= img.min()
+    img /= img.max()
+    img *= 255
+    img = img.permute(1,2,0).numpy().astype('int')
+    img = img[:,:,::-1]
+    return img

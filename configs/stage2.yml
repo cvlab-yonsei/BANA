@@ -1,0 +1,21 @@
+NAME: "ClsNet"
+
+SEED: 13
+
+DATA: 
+  ROOT: "/workspace/BDH/data/VOCdevkit/VOC2012"
+  MODE: "train"
+  BATCH_SIZE: 20
+  CROP_SIZE: 321
+  
+MODEL:
+  WEIGHTS: ""
+  ROI_SIZE: [2,2]
+  GRID_SIZE: 4
+
+SOLVER:
+  LR: 1e-3 
+  MOMENTUM: 0.9
+  WEIGHT_DECAY: 5e-4
+  MAX_ITER: 8000
+  MILESTONES: [5000]

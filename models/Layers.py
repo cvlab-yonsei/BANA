@@ -13,7 +13,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from models.sync_batchnorm.batchnorm import SynchronizedBatchNorm2d
 # try:
 #     from encoding.nn import SyncBatchNorm
 #     _BATCH_NORM = SyncBatchNorm
@@ -21,6 +20,7 @@ from models.sync_batchnorm.batchnorm import SynchronizedBatchNorm2d
 #     _BATCH_NORM = nn.BatchNorm2d
 
 _BOTTLENECK_EXPANSION = 4
+
 
 class _ConvBnReLU(nn.Sequential):
     """
@@ -64,6 +64,7 @@ class _Bottleneck(nn.Module):
         h += self.shortcut(x)
         return F.relu(h)
 
+
 class _ResLayer(nn.Sequential):
     """
     Residual layer with multi grids
@@ -89,6 +90,7 @@ class _ResLayer(nn.Sequential):
                 ),
             )
 
+
 class _Stem(nn.Sequential):
     """
     The 1st conv layer.
@@ -99,15 +101,17 @@ class _Stem(nn.Sequential):
         self.add_module("conv1", _ConvBnReLU(3, norm_type, out_ch, 7, 2, 3, 1))
         self.add_module("pool", nn.MaxPool2d(3, 2, 1, ceil_mode=True))
 
+
 class _Flatten(nn.Module):
     def forward(self, x):
         return x.view(x.size(0), -1)
+
 
 class RES101(nn.Sequential):
     def __init__(self, sync_bn):
         super().__init__()
         if sync_bn:
-            norm_type = SynchronizedBatchNorm2d
+            norm_type = nn.SyncBatchNorm
         else:
             norm_type = nn.BatchNorm2d
         n_blocks = [3,4,23,3]
@@ -123,7 +127,7 @@ class RES101(nn.Sequential):
         
     def freeze_bn(self):
         for m in self.modules():
-            if isinstance(m, nn.BatchNorm2d) or isinstance(m, SynchronizedBatchNorm2d):
+            if isinstance(m, (nn.BatchNorm2d, nn.SyncBatchNorm)):
                 m.eval()
 
     def forward(self, x, return_feature_maps=False):
@@ -137,13 +141,12 @@ class RES101(nn.Sequential):
             return conv_out
         return x
 
-    
 
 class RES101_V3plus(nn.Sequential):
     def __init__(self, output_stride, sync_bn):
         super().__init__()
         if sync_bn:
-            norm_type = SynchronizedBatchNorm2d
+            norm_type = nn.SyncBatchNorm
         else:
             norm_type = nn.BatchNorm2d
         n_blocks = [3,4,23,3]
@@ -166,7 +169,7 @@ class RES101_V3plus(nn.Sequential):
         
     def freeze_bn(self):
         for m in self.modules():
-            if isinstance(m, nn.BatchNorm2d) or isinstance(m, SynchronizedBatchNorm2d):
+            if isinstance(m, (nn.BatchNorm2d, nn.SyncBatchNorm)):
                 m.eval()
     
     def forward(self, x):
@@ -178,7 +181,6 @@ class RES101_V3plus(nn.Sequential):
         x = self.layer5(x)
         return x, low_level_feat
 
-    
 
 class ASPPConv(nn.Sequential):
     def __init__(self, in_channels, out_channels, dilation, BatchNorm):
@@ -188,6 +190,7 @@ class ASPPConv(nn.Sequential):
             nn.ReLU()
         ]
         super(ASPPConv, self).__init__(*modules)
+
 
 class ASPPPooling(nn.Sequential):
     def __init__(self, in_channels, out_channels, BatchNorm, global_avg_pool_bn=False):
@@ -207,12 +210,13 @@ class ASPPPooling(nn.Sequential):
         size = x.shape[-2:]
         x = super(ASPPPooling, self).forward(x)
         return F.interpolate(x, size=size, mode='bilinear', align_corners=False)
-    
+
+
 class ASPP(nn.Module):
     def __init__(self, output_stride, sync_bn, global_avg_pool_bn=False, in_channels=2048, out_channels=256):
         super(ASPP, self).__init__()
         if sync_bn:
-            BatchNorm = SynchronizedBatchNorm2d
+            BatchNorm = nn.SyncBatchNorm
         else:
             BatchNorm = nn.BatchNorm2d
         modules = []
@@ -247,13 +251,18 @@ class ASPP(nn.Module):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 torch.nn.init.kaiming_normal_(m.weight)
-            elif isinstance(m, SynchronizedBatchNorm2d) or isinstance(m, nn.BatchNorm2d):
+            elif isinstance(m, (nn.BatchNorm2d, nn.SyncBatchNorm)):
                 m.weight.data.fill_(1)
                 m.bias.data.zero_()
 
 
 class VGG16(nn.Module):
+    '''
+    This network design is borrowed from AffinitNet.
+    Please, also see their paper (Learning Pixel-level Semantic Affinity with Image-level Supervision, CVPR 2018), and codes (https://github.com/jiwoon-ahn/psa/tree/master/network).
+    '''
     def __init__(self, dilation):
+        super().__init__()
         self.conv1_1 = nn.Conv2d(3, 64, 3, 1, 1)
         self.conv1_2 = nn.Conv2d(64, 64, 3, 1, 1)
         self.mp1 = nn.MaxPool2d(3, 2, 1)

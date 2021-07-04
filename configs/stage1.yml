@@ -1,0 +1,21 @@
+NAME: "ClsNet"
+
+SEED: 13
+
+DATA: 
+  ROOT: "/home/ohyoungmin/Desktop/WS3/data/VOCdevkit/VOC2012"
+  NUM_CLASSES: 21 # For VOC
+  MODE: "train"
+  BATCH_SIZE: 20
+  CROP_SIZE: (321, 321)
+  
+MODEL:
+  ROI_SIZE: [2,2]
+  GRID_SIZE: 4
+
+SOLVER:
+  LR: 1e-3 
+  MOMENTUM: 0.9
+  WEIGHT_DECAY: 5e-4
+  MAX_ITER: 8000
+  MILESTONES: [5000]
