@@ -8,8 +8,14 @@ For more information, please checkout the project site [[website](https://cvlab.
 * Python >= 3.6
 * PyTorch >= 1.3.0
 
-## Dataset
-* PASCAL VOC
+## Getting started
+```bash
+git clone https://github.com/cvlab-yonsei/BANA.git
+cd BANA
+python stage1.py --config-file configs/stage1.yml --gpu-id 0 # For training a classification network
+python stage2.py --config-file configs/stage2.yml --gpu-id 0 # For generating pseudo labels
+python stage3.py --config-file configs/stage3.yml --gpu-id 0 # For training a segmentation network
+```
 
 ## Bibtex
 ```
