@@ -10,7 +10,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 
 import data.transforms_bbox as Tr
-from data.voc import VOC_box, VOC_seg
+from data.voc import VOC_box
 from configs.defaults import _C
 from models.ClsNet import Labeler
 
@@ -70,15 +70,16 @@ def main(cfg):
     train_loader = DataLoader(trainset, batch_size=cfg.DATA.BATCH_SIZE, collate_fn=my_collate, shuffle=True, num_workers=4, pin_memory=True, drop_last=True)
     
     model = Labeler(cfg.DATA.NUM_CLASSES, cfg.MODEL.ROI_SIZE, cfg.MODEL.GRID_SIZE).cuda()
-    model.backbone.load_state_dict(torch.load('./weights/vgg_caffe.pth'), strict=False)
+    model.backbone.load_state_dict(torch.load(f"./weights/{cfg.MODEL.WEIGHTS}"), strict=False)
+    
     params = model.get_params()
     lr = cfg.SOLVER.LR
     wd = cfg.SOLVER.WEIGHT_DECAY
     optimizer = optim.SGD(
-        [{'params':params[0], 'lr':lr,    'weight_decay':wd},
-         {'params':params[1], 'lr':2*lr,  'weight_decay':0 },
-         {'params':params[2], 'lr':10*lr, 'weight_decay':wd},
-         {'params':params[3], 'lr':20*lr, 'weight_decay':0 }], 
+        [{"params":params[0], "lr":lr,    "weight_decay":wd},
+         {"params":params[1], "lr":2*lr,  "weight_decay":0 },
+         {"params":params[2], "lr":10*lr, "weight_decay":wd},
+         {"params":params[3], "lr":20*lr, "weight_decay":0 }], 
         momentum=cfg.SOLVER.MOMENTUM
     )
     scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=cfg.SOLVER.MILESTONES, gamma=0.1)
@@ -95,11 +96,11 @@ def main(cfg):
         except:
             iterator = iter(train_loader)
             sample = next(iterator)
-        img = sample['img']
-        bboxes = sample['bboxes']
-        bg_mask = sample['bg_mask']
-        batchID_of_box = sample['batchID_of_box']
-        ind_valid_bg_mask = bg_mask.mean(dim=(1,2,3)) > 0.125
+        img = sample["img"]
+        bboxes = sample["bboxes"]
+        bg_mask = sample["bg_mask"]
+        batchID_of_box = sample["batchID_of_box"]
+        ind_valid_bg_mask = bg_mask.mean(dim=(1,2,3)) > 0.125 # This is because VGG16 has output stride of 8.
         logits = model(img.cuda(), bboxes, batchID_of_box, bg_mask.cuda(), ind_valid_bg_mask)
         logits = logits[...,0,0]
         fg_t = bboxes[:,-1][:,None].expand(bboxes.shape[0], np.prod(cfg.MODEL.ROI_SIZE))
@@ -124,13 +125,13 @@ def main(cfg):
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--config-file")
-    parser.add_argument("--gpu-id", type=str, default=0, help="select a GPU index")
+    parser.add_argument("--gpu-id", type=str, default="0", help="select a GPU index")
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = get_args()
-    os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_id
+    os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id
     cfg = _C.clone()
     cfg.merge_from_file(args.config_file)
     cfg.freeze()

@@ -48,7 +48,7 @@ class VOC_box(Dataset):
         self.len = len(self.filenames)
     
     def __len__(self):
-        return self.len 
+        return self.len
     
     def __getitem__(self, index):
         fn  = self.filenames[index]

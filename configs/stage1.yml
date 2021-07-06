@@ -10,6 +10,7 @@ DATA:
   CROP_SIZE: (321, 321)
   
 MODEL:
+  WEIGHTS: "vgg_caffe.pth" # From PyCaffe and VGG-16 ImageNet pretrained weights [vgg16_20M.caffemodel] (http://liangchiehchen.com/projects/Init%20Models.html).
   ROI_SIZE: [2,2]
   GRID_SIZE: 4
 

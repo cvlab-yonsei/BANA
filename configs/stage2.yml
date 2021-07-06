@@ -1,21 +1,16 @@
-NAME: "ClsNet"
+NAME: "Generation"
+SAVE_PSEUDO_LABLES: True
 
 SEED: 13
 
 DATA: 
-  ROOT: "/workspace/BDH/data/VOCdevkit/VOC2012"
+  ROOT: "/home/ohyoungmin/Desktop/WS3/data/VOCdevkit/VOC2012"
+  NUM_CLASSES: 21 # For VOC
   MODE: "train"
-  BATCH_SIZE: 20
-  CROP_SIZE: 321
   
 MODEL:
-  WEIGHTS: ""
-  ROI_SIZE: [2,2]
-  GRID_SIZE: 4
-
-SOLVER:
-  LR: 1e-3 
-  MOMENTUM: 0.9
-  WEIGHT_DECAY: 5e-4
-  MAX_ITER: 8000
-  MILESTONES: [5000]
+  WEIGHTS: "ClsNet.pt" # From Stage 1
+  ROI_SIZE: [None,None]
+  GRID_SIZE: 1
+  BG_THRESHOLD: 0.99
+  DCRF: [4, 55, 3, 3, 3]
