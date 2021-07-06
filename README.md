@@ -32,8 +32,7 @@ python stage1.py --config-file configs/stage1.yml --gpu-id 0 # For training a cl
 python stage2.py --config-file configs/stage2.yml --gpu-id 0 # For generating pseudo labels
 ```
 
-* Download our pseudo labels
-<br>[https://drive.google.com/drive/folders/17D9siQWCve6oy1jGdSx-v6Gg6uhi-WBg?usp=sharing]
+* Download our pseudo labels [[Google Drive](https://drive.google.com/drive/folders/17D9siQWCve6oy1jGdSx-v6Gg6uhi-WBg?usp=sharing)]
 
 ## Bibtex
 ```
