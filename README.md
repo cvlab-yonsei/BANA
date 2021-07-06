@@ -1,16 +1,16 @@
 # BANA
-
 This is the implementation of the paper "Background-Aware Pooling and Noise-Aware Loss for Weakly-Supervised Semantic Segmentation".
 
 For more information, please checkout the project site [[website](https://cvlab.yonsei.ac.kr/projects/BANA/)] and the paper [[PDF](https://arxiv.org/pdf/2104.00905.pdf)].
+
 
 ## Requirements
 * Python >= 3.6
 * PyTorch >= 1.3.0
 * yacs (https://github.com/rbgirshick/yacs)
 
-## Getting started
 
+## Getting started
 The folder ```data``` should be like this
 ```
     data   
@@ -34,7 +34,10 @@ python stage1.py --config-file configs/stage1.yml --gpu-id 0 # For training a cl
 python stage2.py --config-file configs/stage2.yml --gpu-id 0 # For generating pseudo labels
 ```
 
-* Download our pseudo labels on PASCAL VOC 2012 [[Google Drive](https://drive.google.com/drive/folders/17D9siQWCve6oy1jGdSx-v6Gg6uhi-WBg?usp=sharing)]
+
+## Download our pseudo labels
+* PASCAL VOC 2012 [[Google Drive](https://drive.google.com/drive/folders/17D9siQWCve6oy1jGdSx-v6Gg6uhi-WBg?usp=sharing)]
+
 
 ## Bibtex
 ```
