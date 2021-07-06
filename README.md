@@ -22,6 +22,8 @@ The folder ```data``` should be like this
             ├── ImageSets
             ├── BgMaskfromBoxes
             └── Generation
+                ├── Y_crf
+                └── Y_ret
 ```
 
 
