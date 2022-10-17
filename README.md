@@ -32,6 +32,7 @@ git clone https://github.com/cvlab-yonsei/BANA.git
 cd BANA
 python stage1.py --config-file configs/stage1.yml --gpu-id 0 # For training a classification network
 python stage2.py --config-file configs/stage2.yml --gpu-id 0 # For generating pseudo labels
+python stage3_vgg.py --config-file configs/stage3_vgg.yml --gpu-id 0 # For training DeepLab-LargeFOV
 ```
 
 
