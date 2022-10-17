@@ -20,6 +20,8 @@ _C.MODEL.ROI_SIZE = []      # For Stage 1&2
 _C.MODEL.GRID_SIZE = 0      # For Stage 1&2
 _C.MODEL.BG_THRESHOLD = 0.  # For Stage 2 only
 _C.MODEL.FREEZE_BN = False  # For Stage 3
+_C.MODEL.TEMP = 0.          # For Stage 3 only
+_C.MODEL.DAMP = 0.          # For Stage 3 only
 _C.MODEL.LAMBDA = 0.        # For Stage 3 only
 _C.MODEL.DCRF= []           # For Stage 2&3
 

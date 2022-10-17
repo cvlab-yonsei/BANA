@@ -3,15 +3,18 @@ NAME: "SegNet_VGG"
 SEED: 13
 
 DATA: 
-  ROOT: "/workspace/BDH/data/VOCdevkit/VOC2012"
+  ROOT: "../data/VOCdevkit/VOC2012"
+  NUM_CLASSES: 21 # For VOC
   MODE: "train"
   PSEUDO_LABEL_FOLDER: ["Ycrf", "Yret"]
   BATCH_SIZE: 20
-  CROP_SIZE: 321
-  
+  CROP_SIZE: (321, 321)
+
 MODEL:
+  WEIGHTS: "vgg_caffe.pth" # From PyCaffe and VGG-16 ImageNet pretrained weights [vgg16_20M.caffemodel] (http://liangchiehchen.com/projects/Init%20Models.html).
   FREEZE_BN: False
-  DAMP: 7 
+  TEMP: 20.
+  DAMP: 7. 
   LAMBDA: 0.1
   DCRF: [4, 121, 5, 3, 3] # DeepLab-V1-LargFOV
 

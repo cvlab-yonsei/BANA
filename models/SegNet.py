@@ -8,34 +8,14 @@ from .sync_batchnorm.batchnorm import SynchronizedBatchNorm2d
 
 
 class DeepLab_LargeFOV(nn.Module):
-    def __init__(self, num_classes, is_CS=False):
+    def __init__(self, num_classes):
         super().__init__()
         self.backbone = VGG16(dilation=12)
-        self.is_CS = is_CS
-        if self.is_CS:
-            self.temperature = 20
         self.classifier = nn.Conv2d(1024, num_classes, 1, bias=False)
         self.from_scratch_layers = [self.classifier]
-        
-    def forward(self, x, img_size):
-        return self.forward_classifier(self.get_features(x), img_size)
     
     def get_features(self, x):
         return self.backbone(x)
-    
-    def forward_classifier(self, x, img_size):
-        if self.is_CS:
-            normed_x = F.normalize(x)
-            normed_w = F.normalize(self.classifier.weight)
-            logits = F.conv2d(normed_x, normed_w)
-            logits = F.interpolate(logits, img_size, mode='bilinear', align_corners=False)
-            return self.temperature * logits
-        else:
-            logit = F.interpolate(self.classifier(x), img_size, mode='bilinear', align_corners=False)
-            if self.training:
-                return logit, x
-            else:
-                return logit
     
     def get_params(self):
         # pret_weight, pret_bias, scratch_weight, scratch_bias
@@ -58,12 +38,9 @@ class DeepLab_LargeFOV(nn.Module):
 
                             
 class DeepLab_ASPP(nn.Module):
-    def __init__(self, num_classes, output_stride, sync_bn, is_CS=True):
+    def __init__(self, num_classes, output_stride, sync_bn):
         super().__init__()
         self.backbone = RES101(sync_bn)
-        self.is_CS = is_CS
-        if self.is_CS:
-            self.temperature = 20
         ndim = 256
         self.rates = [6, 12, 18, 24]
         bias = False 
@@ -82,23 +59,10 @@ class DeepLab_ASPP(nn.Module):
             if isinstance(m, nn.BatchNorm2d) or isinstance(m, SynchronizedBatchNorm2d):
                 m.eval()
                 
-    def forward(self, x, img_size):
-        return self.forward_classifier(self.get_features(x), img_size)
-    
     def get_features(self, x):
         x = self.backbone(x)
         return F.relu(self.c1(x) + self.c2(x) + self.c3(x) + self.c4(x))
     
-    def forward_classifier(self, x, img_size):
-        if self.is_CS:
-            normed_x = F.normalize(x)
-            normed_w = F.normalize(self.classifier.weight)
-            logits = F.conv2d(normed_x, normed_w)
-            logits = F.interpolate(logits, img_size, mode='bilinear', align_corners=False)
-            return self.temperature * logits
-        else:
-            return F.interpolate(self.classifier(x), img_size, mode='bilinear', align_corners=False)
-        
     def get_1x_lr_params(self):
         modules = [self.backbone]
         for i in range(len(modules)):

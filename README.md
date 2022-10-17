@@ -22,8 +22,8 @@ The folder ```data``` should be like this
             ├── ImageSets
             ├── BgMaskfromBoxes
             └── Generation
-                ├── Y_crf
-                └── Y_ret
+                ├── Ycrf
+                └── Yret
 ```
 
 
@@ -36,8 +36,8 @@ python stage2.py --config-file configs/stage2.yml --gpu-id 0 # For generating ps
 
 
 ## Download our pseudo labels and BgMaskfromBoxes on PASCAL VOC 2012
-* [[Pseudo labels](https://drive.google.com/drive/folders/17D9siQWCve6oy1jGdSx-v6Gg6uhi-WBg?usp=sharing)]
-* [[BgMaskfromBoxes](https://drive.google.com/file/d/1hI14Mf_JELA1nVafSRDXiex2ua204fAa/view?usp=sharing)]
+* [Pseudo labels and BgMaskfromBoxes](https://drive.google.com/drive/folders/1OX_GjCnG0S_fy_UxlM7CJG0nNph2YwVJ?usp=sharing)
+
 
 ## Bibtex
 ```

@@ -9,8 +9,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 
-import data.transforms_bbox as Tr
-from data.voc import VOC_box
+import datasets.transforms_bbox as Tr
+from datasets.voc import VOC_box
 from configs.defaults import _C
 from models.ClsNet import Labeler
 

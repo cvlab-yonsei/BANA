@@ -12,8 +12,8 @@ from torch.utils.data import DataLoader
 from PIL import Image
 from tqdm import tqdm
 
-import data.transforms_bbox as Tr
-from data.voc import VOC_box
+import datasets.transforms_bbox as Tr
+from datasets.voc import VOC_box
 from configs.defaults import _C
 from models.ClsNet import Labeler, pad_for_grid
 from utils.densecrf import DENSE_CRF

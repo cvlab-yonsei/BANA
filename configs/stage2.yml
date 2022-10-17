@@ -4,7 +4,7 @@ SAVE_PSEUDO_LABLES: True
 SEED: 13
 
 DATA: 
-  ROOT: "/home/ohyoungmin/Desktop/WS3/data/VOCdevkit/VOC2012"
+  ROOT: "../data/VOCdevkit/VOC2012"
   NUM_CLASSES: 21 # For VOC
   MODE: "train"
   
