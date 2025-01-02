@@ -37,7 +37,7 @@ python stage3_vgg.py --config-file configs/stage3_vgg.yml --gpu-id 0 # For train
 
 
 ## Download our pseudo labels and BgMaskfromBoxes on PASCAL VOC 2012
-* [Pseudo labels and BgMaskfromBoxes](https://drive.google.com/drive/folders/1OX_GjCnG0S_fy_UxlM7CJG0nNph2YwVJ?usp=sharing)
+* Please refer to this [url](https://github.com/cvlab-yonsei/BANA/releases/tag/v1.0)
 
 
 ## Bibtex
